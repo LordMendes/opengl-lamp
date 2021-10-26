@@ -39,7 +39,6 @@ void loadTextureChess() {
     }
 }
 
-
 void loadTextureBrown() {
     for (int row = 0; row < IMAGE_ROWS; row++) {
         for (int col = 0; col < IMAGE_COLS; col++) {
@@ -49,6 +48,7 @@ void loadTextureBrown() {
         }
     }
 }
+
 void loadLampTexture() {
     for (int row = 0; row < IMAGE_ROWS; row++) {
         for (int col = 0; col < IMAGE_COLS; col++) {
@@ -59,7 +59,6 @@ void loadLampTexture() {
     }
 }
 
-
 void loadLampStickTexture() {
     for (int row = 0; row < IMAGE_ROWS; row++) {
         for (int col = 0; col < IMAGE_COLS; col++) {
@@ -69,6 +68,18 @@ void loadLampStickTexture() {
         }
     }
 }
+
+
+void loadCarpetTexture() {
+    for (int row = 0; row < IMAGE_ROWS; row++) {
+        for (int col = 0; col < IMAGE_COLS; col++) {
+            imageData[row][col][0] = (GLubyte)100;
+            imageData[row][col][1] = (GLubyte)36;
+            imageData[row][col][2] = (GLubyte)36;
+        }
+    }
+}
+
 
 void initGL(GLvoid) {
     glShadeModel(GL_SMOOTH);              
@@ -91,120 +102,80 @@ void initGL(GLvoid) {
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
-void draw_sphere()
-{
-    
-    GLUquadric* quadObj = gluNewQuadric();
+void new_plan( float width=5.0f,float height=1.0f) {
+   
 
-    gluQuadricTexture(quadObj, GL_TRUE);
-    gluSphere(quadObj, 1, 100, 100);
-    gluDeleteQuadric(quadObj);
-
-}
-
-void draw_plane(
-    int rotationAngle=0, 
-
-    int xDimension=0, 
-    int yDimension=0, 
-    int zDimension=0,
-
-    int width=4,
-    int height=4,
-
-    double sideLenMultiplier=1.0,
-
-    float zOffset=0.0f,
-    float xOffset=0.0f, 
-    float yOffset=0.0f 
-    )
-{
-    int i, j;
-
-    glPushMatrix();
-    glRotatef(rotationAngle, xDimension, yDimension, zDimension);
-    glTranslatef(sideLenMultiplier+xOffset,zOffset,sideLenMultiplier + yOffset);
-    for (j = 0; j < height; ++j) {
-        for (i = 0; i < width; ++i) {
-            glBegin(GL_QUADS);
-            glTexCoord2f(0.0f, 0.5f);
-            glVertex3d(i * sideLenMultiplier, 0.0, -j * sideLenMultiplier);
-
-            glTexCoord2f(0.5f, 0.5f);
-            glVertex3d(i * sideLenMultiplier + sideLenMultiplier, 0.0, -j * sideLenMultiplier);
-
-            glTexCoord2f(0.5f, 0.0f);
-            glVertex3d(i * sideLenMultiplier + sideLenMultiplier, 0.0, -j * sideLenMultiplier + sideLenMultiplier);
-            
-            glTexCoord2f(0.0f, 0.0f);
-            glVertex3d(i * sideLenMultiplier, 0.0, -j * sideLenMultiplier + sideLenMultiplier);
-            glEnd();
-        }
-    }
-    glPopMatrix();
-}
-
-void plan(float xpos, float ypos, float zpos, float width, float height){
     glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.5f);
+    glVertex3d(0.0 * width, 0.0, 0.0* height);
+
+    glTexCoord2f(0.5f, 0.5f);
+    glVertex3d(0.0 * width + width, 0.0, -0.0 * height);
+
+    glTexCoord2f(0.5f, 0.0f);
+    glVertex3d(0.0 * width + width, 0.0, -0.0 * height + height);
+
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3d(xpos, xpos, zpos);
-
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3d(xpos, xpos+width, zpos);
-
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3d(ypos, ypos, zpos);
-    
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3d(ypos, ypos+height, zpos);
+    glVertex3d(0.0 * width, 0.0, -0.0 * height + height);
     glEnd();
 }
 
 void tableTop() {
+
+    glRotatef(90, 1, 0, 0);
+    //base
+    glTranslatef(-0.5f,0.0f,-3.5);    
+    new_plan(4.5,4.5);
+    //topo
+    glTranslatef(0.0f,-0.2f,0.0);    
+    new_plan(4.5,4.5);
+    
+    //lados
+    glRotatef(90, 0, 0, 1);
+    new_plan(0.2,4.5);
+
+    glRotatef(90, 1, 0, 0);
+    new_plan(0.2,4.5);
+
+    glTranslatef(0.0f,4.5f,4.5f);    
+    glRotatef(90, 1, 0, 0);  
+    new_plan(0.2,4.5);
+
+
+    glRotatef(90, 1, 0, 0);  
+    new_plan(0.2,4.5);
+
+
     
 
-    glTranslatef(-3.0f,0.0f,0.0f);
 
-    //superfícies
-    draw_plane(90, 1,0,0, 4,4, 1.0f, 0.2f,0.0f,0.0f);
-    draw_plane(90, 1,0,0, 4,4, 1.0f, 0.4f,0.0f,0.0f);
-
-    //lados
-    draw_plane(90, 0,0,0, 20,1, 0.2f, 1.8f+0.2f,0.75f,0.0f);
-    draw_plane(90, 0,0,0, 20,1, 0.2f, -2.2f+0.2f,0.75f,0.0f);
-
-    draw_plane(90, 0,0,1, 20,1, 0.2f, -1.0f,-2.2f,0.0f);
-    draw_plane(90, 0,0,1, 20,1, 0.2f, -5.0f,-2.2f,0.0f); 
 }
 
-
 void tableLeg() {
-    //superfícies
-    draw_plane(90, 1,0,0, 1,1, 0.5f, 0.2f,0.0f,0.0f);
-    draw_plane(90, 1,0,0, 1,1, 0.5f, 3.7f,0.0f,0.0f);
+    new_plan(0.5f,3.0f);
+    glTranslatef(0.0f,0.5f,0.0);    
+    new_plan(0.5f,3.0f);
 
-    //lados
-    draw_plane(90, 0,0,0, 5,35, 0.1f, -0.5f,0.4f,3.5f);
-    draw_plane(90, 0,0,0, 5,35, 0.1f, -1.0f,0.4f,3.5f);
+    glRotatef(270, 0, 0, 1);
+    new_plan(0.5f,3.0f);
 
-    draw_plane(90, 0,0,1, 5,35, 0.1f, -0.5f,-1.1f,3.5f);
-    draw_plane(90, 0,0,1, 5,35, 0.1f, -1.0f,-1.1f,3.5f);
-
+    glTranslatef(0.0f,0.5f,0.0);    
+    new_plan(0.5f,3.0f);
 }
 
 void tableLegs(){
+    //(+X-) (+longe y -perto) (+ baixo z - alto)
+    glTranslatef(1.25f,1.25f,0.25f);
+    tableLeg();
+
+    glTranslatef(0.0f,2.5f,0.0f);
+    tableLeg();
     
-    glTranslatef(0.75f,-0.75f,0.0f);
+    glTranslatef(0.0f,2.5f,0.0f);
     tableLeg();
 
-    glTranslatef(0.0f,3.0f,0.0f);
+    glTranslatef(0.0f,2.5f,0.0f);
     tableLeg();
-
-    glTranslatef(3.0f,0.0f,0.0f);
-    tableLeg();
-    glTranslatef(0.0f,-3.0f,0.0f);
-    tableLeg();
-
 }
 
 void lampTop() {
@@ -223,9 +194,9 @@ void lampBase() {
 
     glTranslatef(0, 0, 5);
     glRotatef(0, 0, 0, 1);
-    gluDisk(gluNewQuadric(), 0, 1, 100,1);
+    gluDisk(gluNewQuadric(), 0, 1, 1000,1000);
     glTranslatef(0.0f, 0.0f, 0.2f);
-    gluDisk(gluNewQuadric(), 0, 1, 100,1);
+    gluDisk(gluNewQuadric(), 0, 1, 1000,1000);
 
     glTranslatef(0.0f, 0.0f, -0.2f);
     glRotatef(90, 0, 0, 1);
@@ -240,7 +211,7 @@ void lampStick() {
 
     glTranslatef(0, 0, 0);
     glRotatef(90, 0, 0, 1);
-    gluCylinder(quadObj, 0.2f,0.2f,5.0f,100,100);
+    gluCylinder(quadObj, 0.2f,0.2f,5.0f,500,500);
     gluDeleteQuadric(quadObj);
 }
 
@@ -250,49 +221,79 @@ void lampHead() {
     
     glTranslatef(0, 3, 0);
     glRotatef(90, 1, 0, 0);
-    gluCylinder(quadObj, 1.0f,2.0f,2.0f,100,100);
+    gluCylinder(quadObj, 1.0f,2.0f,2.0f,500,500);
     gluDeleteQuadric(quadObj);
 }
 
-void draw_pyramid(){
-  glBegin(GL_TRIANGLES);
-      glColor3f(1.0f, 0.0f, 0.0f); 
-      glVertex3f( 0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);  
-      glVertex3f(-1.0f, -1.0f, 1.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);   
-      glVertex3f(1.0f, -1.0f, 1.0f);
- 
-      glColor3f(1.0f, 0.0f, 0.0f);  
-      glVertex3f(0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);
-      glVertex3f(1.0f, -1.0f, 1.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);    
-      glVertex3f(1.0f, -1.0f, -1.0f);
- 
-      glColor3f(1.0f, 0.0f, 0.0f);  
-      glVertex3f(0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);  
-      glVertex3f(1.0f, -1.0f, -1.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);   
-      glVertex3f(-1.0f, -1.0f, -1.0f);
- 
-      glColor3f(1.0f,0.0f,0.0f);      
-      glVertex3f( 0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f,0.0f,1.0f);       
-      glVertex3f(-1.0f,-1.0f,-1.0f);
-      glColor3f(0.0f,1.0f,0.0f);   
-      glVertex3f(-1.0f,-1.0f, 1.0f);
-   glEnd();
+void carpet(int multiplierW, int multiplierH) {
+
+    glRotatef(90, 0, 0, 1);
+    //base
+    glTranslatef(-0.5f,0.0f,-3.5);    
+    new_plan(multiplierW * 4.5, multiplierH * 4.5);
+    //topo
+    glTranslatef(0.0f,-0.2f,0.0);    
+    new_plan(multiplierW*4.5,multiplierH*4.5);
+    
+    //lados
+    glRotatef(90, 0, 0, 1);
+    new_plan(0.2,multiplierH*4.5);
+
+    glRotatef(90, 1, 0, 0);
+    new_plan(0.2,multiplierW*4.5);
+
+    glTranslatef(0.0f,multiplierH*4.5f,multiplierH*4.5f+9.0);    
+    glRotatef(90, 1, 0, 0);  
+    new_plan(0.2,multiplierH*4.5);
+
+
+    glRotatef(90, 1, 0, 0);  
+    new_plan(0.2,multiplierW*4.5);
 }
+
+void sofa() {
+    new_plan(2.0f,5.0f);
+    glTranslatef(0.0f,5.0f,0.0);    
+    new_plan(2.0f,5.0f);
+
+    glRotatef(270, 0, 0, 1);
+    new_plan(5.0f,2.0f);
+    new_plan(5.0f,5.0f);
+    //topo
+    glTranslatef(0.0f,2.0f,0.0);    
+    new_plan(5.0f,5.0f);
+
+    glTranslatef(0.0f,-2.0f,0.0);    
+    glRotatef(270, 1, 0, 0);
+    new_plan(5.0f,5.0f);
+
+    glTranslatef(0.0f,-1.0f,0.0);    
+    new_plan(5.0f,5.0f);
+
+    glRotatef(270, 1, 0, 0);
+    glTranslatef(0.0f,-5.0f,0.0);    
+    new_plan(5.0f,1.0f);
+
+    glRotatef(90, 0, 0, 1);
+    new_plan(5.0f,1.0f);
+
+    glTranslatef(0.0f,-5.0f,0.0);    
+    new_plan(5.0f,1.0f);
+
+    glTranslatef(3.0f,0.0f,-4.0);    
+    glRotatef(90, 0, 1, 0);
+    glRotatef(90, 0, 0, 1);
+    new_plan(5.0f,2.0f);
+}
+
 
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     //rotate
     glLoadIdentity();  
     //posição da camera
-    glTranslatef(0.0f, 0.0f, -15.0f);
-    glRotatef(30, 0.0f, 1.0f, 0.0f);
+    glTranslatef(0.0f, 0.0f, -35.0f);
+    glRotatef(375, 0.0f, 1.0f, 0.0f);
     glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
     glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
 
@@ -302,21 +303,21 @@ void display(void) {
 
     glEnable(GL_LIGHTING); 
     glEnable(GL_LIGHT0); 
+
     GLfloat ambient_color[] = { 1.0, 1.0, 1.0, 1.0 };
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient_color);
 
-    GLfloat directional_pos[] = { 1.0, 1.0, 1.0, 0.0 }; 
-    
-    glLightfv(GL_LIGHT0, GL_POSITION, directional_pos);
+    // spot
+    // GLfloat directional_pos[] = { 1.0, 1.0, 1.0, 0.0 };     
+    // glLightfv(GL_LIGHT0, GL_POSITION, directional_pos);
 
-    GLfloat point_pos[] = { 10.0, 10.0, 10.0, 1.0 };
-    glLightfv(GL_LIGHT0, GL_POSITION, point_pos);
+    GLfloat point_pos[] = { -1.0, 0.0, 0.0 };
+    glLightfv(GL_LIGHT0, GL_POSITION, point_pos); // posição
 
-    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 45);
-    GLfloat spot_position[] = { 5.0, 20.0, 40.0, 1.0 }; 
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 360); // corte do spot
+
+    GLfloat spot_position[] = { 0.0,6.0, 0.0};     //
     glLightfv(GL_LIGHT0, GL_POSITION, spot_position);
-
-  
 
     GLfloat light_ambient[] = { 0.0, 1.0, 1.0, 1.0 };
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -328,7 +329,7 @@ void display(void) {
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
 
-    GLfloat mat_diffuse[] = { 0.2, 0.2, 0.2, 1.0 };
+    GLfloat mat_diffuse[] = { 0.3, 0.3, 0.3, 1.0 };
     GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -336,22 +337,35 @@ void display(void) {
     // objetos
     loadLampTexture();
     glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-    lampHead();
+    lampHead(); //1
     
     
     loadLampStickTexture();
     glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-    lampStick();
-    lampTop();
-    lampBase() ;
+    lampStick(); //2
+    lampTop(); //3
+    lampBase() ; //4
 
     loadTextureBrown();  
     glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-    tableTop();
-    tableLegs();
-    
+    glTranslatef(-3.0f,0.0f,0.0f);   
+    tableLegs(); //5
+    tableTop(); //6
 
+    loadCarpetTexture();
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+    glTranslatef(3.2f,-10.0f,-3.5f);   
+    carpet(6,4); //7
+
+
+    loadLampStickTexture();
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+    sofa(); //8
+
+
+    
     glutSwapBuffers(); 
+
 }
 
 void reshape(GLsizei width, GLsizei height) {  
