@@ -89,9 +89,6 @@ void initGL(GLvoid) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL); 
 
-    loadTextureChess();  
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, IMAGE_COLS, IMAGE_ROWS, 0, GL_RGB,
-        GL_UNSIGNED_BYTE, imageData); 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
